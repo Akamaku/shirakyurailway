@@ -216,10 +216,11 @@
 <script>
 /* ========== 設定 ========== */
 const MARKS  = {'普通':'', '準急':'準', '急行':'急', '通勤急行':'通'};
-const HIDDEN = ['臨時','回送','試運転'];        // 走行位置で非表示
+const HIDDEN = ['臨時','回送','試運転'];        // 全画面で非表示
 const CARS_DEFAULT = 8;
 const CHEV_COLOR = {'普通':'#111'};
 const REFRESH_MS = 15000;                        // 走行位置の更新間隔
+const DAY_START = 4*3600;                        // 1日の起点 4:00（0:00〜3:59は前日扱い＝24時〜27時）
 
 /* ========== 1. .oud2 パーサー ========== */
 function parseOud2(text, fallbackName){
@@ -248,7 +249,7 @@ function parseOud2(text, fallbackName){
     const trains=[];
     for(const dir of d._children){
       if(dir._type!=='Kudari'&&dir._type!=='Nobori') continue;
-      for(const r of dir._children.filter(c=>c._type==='Ressya')) trains.push(buildTrain(r,dir._type==='Kudari',stations.length,types));
+      for(const r of dir._children.filter(c=>c._type==='Ressya')){ const tr=buildTrain(r,dir._type==='Kudari',stations.length,types); if(!tr.hidden) trains.push(tr); }
     }
     return {name:d.DiaName||'ダイヤ', trains, holiday:/土休|休日|土日/.test(d.DiaName||'')};
   });
@@ -277,8 +278,9 @@ function buildTrain(r, down, n, types){
     if(s.arr==null) s.arr=s.dep; if(s.dep==null) s.dep=s.arr;
     if(s.arr!=null){ if(last!=null&&s.arr<last-43200) s.arr+=86400; if(s.dep<s.arr) s.dep+=86400; last=s.dep; }
   }
-  const type=types[+r.Syubetsu]||{name:'',color:'#888'};
   const timed=stops.filter(s=>s.arr!=null);
+  if(timed.length && timed[0].arr<DAY_START) for(const s of timed){ s.arr+=86400; s.dep+=86400; }
+  const type=types[+r.Syubetsu]||{name:'',color:'#888'};
   return {down, type, trainNo:r.Ressyamei||'', opNo:r.Ressyabangou||'', bikou:r.Bikou||'', cars:CARS_DEFAULT, stops,
     first: timed[0]||null, lastStop: timed[timed.length-1]||null,
     destIdx: timed.length? timed[timed.length-1].idx:null, hidden:HIDDEN.includes(type.name)};
@@ -287,7 +289,7 @@ function buildTrain(r, down, n, types){
 /* ========== 2. 位置計算 ========== */
 function locate(train, t){
   const st=train.stops.filter(s=>s.arr!=null); if(st.length<2) return null;
-  for(const now of [t,t+86400]){
+  for(const now of [t]){
     if(now<st[0].dep||now>st[st.length-1].arr) continue;
     for(let i=0;i<st.length;i++){
       const s=st[i];
@@ -311,13 +313,14 @@ const isRunning=(tr,t)=>!!locate(tr,t);
 /* ========== 共通 ========== */
 const $=id=>document.getElementById(id);
 const esc=t=>String(t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-function nowSec(){const d=new Date();return d.getHours()*3600+d.getMinutes()*60+d.getSeconds()}
-function fmt(sec){sec=((sec%86400)+86400)%86400;const h=Math.floor(sec/3600),m=Math.floor(sec%3600/60),s=Math.floor(sec%60);return [h,m,s].map(v=>String(v).padStart(2,'0')).join(':')}
-function fmtHM(sec){sec=((sec%86400)+86400)%86400;const h=Math.floor(sec/3600),m=Math.floor(sec%3600/60),s=Math.floor(sec%60);return `${h}:${String(m).padStart(2,'0')}`+(s?`:${String(s).padStart(2,'0')}`:'');}
-function fmtHMM(sec){sec=((sec%86400)+86400)%86400;const h=Math.floor(sec/3600),m=Math.floor(sec%3600/60);return `${h}${String(m).padStart(2,'0')}`}
-function dateStr(){const d=new Date();return `${d.getMonth()+1}/${d.getDate()}`}
+function nowSec(){const d=new Date();let s=d.getHours()*3600+d.getMinutes()*60+d.getSeconds();return s<DAY_START? s+86400 : s}
+function opDate(){const d=new Date(Date.now()-DAY_START*1000);return d}  // 運行日（4:00起点）
+function fmt(sec){const h=Math.floor(sec/3600),m=Math.floor(sec%3600/60),s=Math.floor(sec%60);return [h,m,s].map(v=>String(v).padStart(2,'0')).join(':')}
+function fmtHM(sec){const h=Math.floor(sec/3600),m=Math.floor(sec%3600/60),s=Math.floor(sec%60);return `${h}:${String(m).padStart(2,'0')}`+(s?`:${String(s).padStart(2,'0')}`:'');}
+function fmtHMM(sec){const h=Math.floor(sec/3600),m=Math.floor(sec%3600/60);return `${h}${String(m).padStart(2,'0')}`}
+function dateStr(){const d=opDate();return `${d.getMonth()+1}/${d.getDate()}`}
 function chevColor(tr){return CHEV_COLOR[tr.type.name]||tr.type.color}
-function pickDia(dias){ const wd=new Date().getDay(), hol=(wd===0||wd===6); const i=dias.findIndex(d=>hol?d.holiday:!d.holiday); return i>=0?i:0; }
+function pickDia(dias){ const wd=opDate().getDay(), hol=(wd===0||wd===6); const i=dias.findIndex(d=>hol?d.holiday:!d.holiday); return i>=0?i:0; }
 function trackName(s){ const st=data.stations[s.idx]; return (s.track!=null&&st.tracks[s.track]!=null)? st.tracks[s.track] : ''; }
 
 let data=null;
@@ -456,12 +459,19 @@ function renderOps(){
 }
 
 /* ========== 時刻表 ========== */
-$('ttDia').onchange=renderTT; $('ttDir').onchange=renderTT; $('ttHour').onchange=renderTT;
+$('ttDia').onchange=()=>{updateHourOptions();renderTT();}; $('ttDir').onchange=()=>{updateHourOptions();renderTT();}; $('ttHour').onchange=renderTT;
+function updateHourOptions(){
+  const dia=data.dias[+$('ttDia').value||0], down=$('ttDir').value==='d';
+  const hours=[...new Set(dia.trains.filter(x=>x.down===down&&x.first).map(x=>Math.floor(x.first.dep/3600)))].sort((a,b)=>a-b);
+  const cur=$('ttHour').value;
+  $('ttHour').innerHTML=`<option value="">全時間帯</option>`+hours.map(hh=>`<option value="${hh}">${hh}時台</option>`).join('');
+  $('ttHour').value = hours.includes(+cur)? cur : '';
+}
 function renderTT(){
   const dia=data.dias[+$('ttDia').value||0], down=$('ttDir').value==='d', hour=$('ttHour').value;
   $('ttTitle').textContent=`${data.rosenName} ${down?'下り':'上り'}`;
   let trains=dia.trains.filter(x=>x.down===down&&x.first).sort((a,b)=>a.first.dep-b.first.dep);
-  if(hour!=='') trains=trains.filter(x=>Math.floor(x.first.dep/3600)%24===+hour);
+  if(hour!=='') trains=trains.filter(x=>Math.floor(x.first.dep/3600)===+hour);
   const order=data.stations.map((_,i)=>i); if(!down) order.reverse();
   let h=`<table class="tt"><thead>
     <tr><th class="stn">運用番号</th>${trains.map(x=>`<th>${esc(x.opNo)}</th>`).join('')}</tr>
@@ -493,7 +503,7 @@ function loadRoute(i){
   const opts=data.dias.map((d,i)=>`<option value="${i}">${esc(d.name)}</option>`).join('');
   $('posDia').innerHTML=opts; $('ttDia').innerHTML=opts;
   posDia=pickDia(data.dias); $('posDia').value=posDia; $('ttDia').value=posDia;
-  $('ttHour').innerHTML=`<option value="">全時間帯</option>`+[...Array(24).keys()].map(hh=>`<option value="${hh}">${hh}時台</option>`).join('');
+  updateHourOptions();
   opsState={dia:null,op:null};
 }
 $('file').onchange=async e=>{
