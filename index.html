@@ -62,7 +62,8 @@
   .tile:active{background:var(--band)}
 
   /* 走行位置 */
-  .track{position:relative;overflow:hidden;--pad:20px}
+  .track{position:relative;overflow:visible;--pad:20px}
+  #pg-pos{overflow-x:auto}
   .track .line{position:absolute;left:50%;top:0;bottom:0;width:14px;transform:translateX(-50%);background:var(--blue)}
   .st{position:absolute;left:0;right:0;height:var(--st-h);background:var(--band)}
   .st .tag{position:absolute;left:0;top:0;bottom:0;width:26%;max-width:190px;background:var(--band-dark);clip-path:polygon(0 0,100% 0,65% 100%,0 100%)}
@@ -116,6 +117,19 @@
   .flow td.ar{text-align:center;color:#444}
   .flow tr.run td,.flow tr.run td.no,.flow tr.run td.no small{color:var(--red)}
   .doc .note{font-size:13px;color:#555;margin:12px 0 0 16px}
+  @media (max-width:480px){
+    .doc{padding:14px 8px 40px}
+    .doc h2{font-size:21px}
+    .doc ul{font-size:17px;padding-left:24px}
+    .doc .box h3{font-size:20px;margin-left:8px}
+    .flow{font-size:15px;table-layout:fixed;width:100%}
+    .flow td{padding:8px 2px;overflow:hidden;text-overflow:ellipsis}
+    .flow td.no{padding-left:6px;width:28%}
+    .flow td.no small{font-size:11px;margin-left:3px}
+    .flow td.ar{width:20px}
+    .flow td.t{width:42px}
+    .doc .note{margin-left:8px}
+  }
 
   /* 時刻表 */
   .ttwrap{overflow:auto;max-height:calc(100vh - 210px)}
@@ -378,7 +392,8 @@ function renderPos(t){
     keep.add('tr'+k);
     let y= loc.state==='stop'? yOf(loc.idx) : (yOf(loc.from)+yOf(loc.to))/2;
     const key=(tr.down?'d':'u')+Math.round(y);
-    const n=(buckets[key]=(buckets[key]||0)+1); y+=(n-1)*56;
+    const n=(buckets[key]=(buckets[key]||0)+1);   // 同じ位置・同方面は横並び
+    const dx=(n-1)*130;
     let el=g.querySelector('#tr'+k);
     if(!el){
       el=document.createElement('div'); el.className='tr '+(tr.down?'dn':'up'); el.id='tr'+k; el.dataset.k=k;
@@ -389,6 +404,7 @@ function renderPos(t){
       g.appendChild(el);
     }
     el.style.top=y+'px';
+    if(tr.down) el.style.left=`calc(50% + ${30+dx}px)`; else el.style.right=`calc(50% + ${30+dx}px)`;
   }
   g.querySelectorAll('.tr').forEach(el=>{ if(!keep.has(el.id)) el.remove(); });
   $('posNow').textContent=`${dateStr()} ${fmt(t)} 現在`;
@@ -440,8 +456,7 @@ function renderOps(){
   if(opsState.op==null){
     const ops=[...new Set(dia.trains.map(x=>x.opNo))].sort((a,b)=>a.localeCompare(b,'ja',{numeric:true}));
     body.innerHTML=`<h2>${esc(dia.name)}</h2><ul class="compact">${ops.map(o=>{
-      const run=todayDia && dia.trains.some(x=>x.opNo===o&&isRunning(x,t));
-      return `<li><a class="${run?'run':''}" data-o="${esc(o)}">${esc(o)}運用</a></li>`;}).join('')}</ul>`;
+      return `<li><a class="wd" data-o="${esc(o)}">${esc(o)}運用</a></li>`;}).join('')}</ul>`;
     body.querySelectorAll('a').forEach(a=>a.onclick=()=>go('ops',{dia:opsState.dia,op:a.dataset.o}));
     return;
   }
@@ -499,7 +514,6 @@ function renderTT(){
 function loadRoute(i){
   const r=ROUTES[i];
   data=parseOud2(r.text,r.name);
-  $('homeTitle').textContent=`${data.rosenName}ポータル`; $('homeH').textContent=`${data.rosenName}ポータルへようこそ！`;
   const opts=data.dias.map((d,i)=>`<option value="${i}">${esc(d.name)}</option>`).join('');
   $('posDia').innerHTML=opts; $('ttDia').innerHTML=opts;
   posDia=pickDia(data.dias); $('posDia').value=posDia; $('ttDia').value=posDia;
