@@ -62,12 +62,15 @@
   .tile:active{background:var(--band)}
 
   /* 走行位置 */
-  .track{position:relative;overflow:visible;--pad:20px}
-  #pg-pos{overflow-x:auto}
+  .track{position:relative;overflow:hidden;--pad:20px}
   .track .line{position:absolute;left:50%;top:0;bottom:0;width:14px;transform:translateX(-50%);background:var(--blue)}
   .st{position:absolute;left:0;right:0;height:var(--st-h);background:var(--band)}
   .st .tag{position:absolute;left:0;top:0;bottom:0;width:26%;max-width:190px;background:var(--band-dark);clip-path:polygon(0 0,100% 0,65% 100%,0 100%)}
   .st .nm{position:absolute;left:12px;top:10px;font-size:20px;font-weight:800;color:var(--navy);z-index:1;white-space:nowrap}
+  .st .nm.xfer{text-decoration:underline;cursor:pointer}
+  .modal .xlist{list-style:none;margin:0;padding:0}
+  .modal .xlist li{border-bottom:1px solid var(--rule)}
+  .modal .xlist button{display:block;width:100%;text-align:left;background:none;border:0;padding:14px 4px;font-size:18px;color:#1a5cff}
   .st .dot{position:absolute;left:50%;top:50%;width:30px;height:30px;border-radius:50%;background:var(--blue);transform:translate(-50%,-50%)}
   .tr{position:absolute;display:flex;align-items:center;gap:10px;transform:translateY(-50%);cursor:pointer;-webkit-tap-highlight-color:transparent;z-index:2}
   .tr.up{right:calc(50% + 30px);flex-direction:row-reverse}
@@ -168,7 +171,7 @@
   <header class="hdr"><span></span><div class="ttl"><h1 id="homeTitle">白急線ポータル</h1></div><span></span></header>
   <div class="home">
     <h2 id="homeH">白急線ポータルへようこそ！</h2>
-    <p>白急桜田線の時刻表・列車走行位置・車両運用をまとめています。ダイヤデータは OuDiaSecond ファイルから生成しています。</p>
+    <p>白急各線の時刻表・列車走行位置・車両運用をまとめています。</p>
     <hr>
     <div class="tiles">
       <button class="tile" data-go="tt">
@@ -383,17 +386,20 @@ function renderPosSel(){
 }
 
 /* ========== 走行位置 ========== */
-const ST_H=96, SEG_H=112, PAD=20;
+const ST_H=96, SEG_H=190, PAD=20;   // 駅間は列車3本（56px×3）が縦に入る高さ
 let posDia=0, timer=null, curT=0, selected=null;
 const yOf=idx=>PAD+idx*(ST_H+SEG_H)+ST_H/2;
 
 function buildTrack(){
   const n=data.stations.length, H=PAD*2+n*ST_H+(n-1)*SEG_H;
   let s=`<div class="line"></div>`;
-  data.stations.forEach((st,i)=>{ s+=`<div class="st" style="top:${yOf(i)-ST_H/2}px"><div class="tag"></div><div class="nm">${esc(st.name)}</div><div class="dot"></div></div>`; });
+  data.stations.forEach((st,i)=>{
+    const xfer=otherRoutesWithStation(st.name).length>0;
+    s+=`<div class="st" style="top:${yOf(i)-ST_H/2}px"><div class="tag"></div><div class="nm ${xfer?'xfer':''}" data-st="${esc(st.name)}">${esc(st.name)}</div><div class="dot"></div></div>`; });
   s+=`<div id="trains"></div>`;
   const tk=$('track'); tk.style.height=H+'px'; tk.innerHTML=s;
   $('trains').addEventListener('click',e=>{const g=e.target.closest('.tr'); if(g) openModal(+g.dataset.k);});
+  tk.querySelectorAll('.nm.xfer').forEach(el=>el.onclick=()=>openXfer(el.dataset.st));
   $('posTitle').textContent=data.rosenName;
 }
 function renderPos(t){
@@ -407,8 +413,8 @@ function renderPos(t){
     keep.add('tr'+k);
     let y= loc.state==='stop'? yOf(loc.idx) : (yOf(loc.from)+yOf(loc.to))/2;
     const key=(tr.down?'d':'u')+Math.round(y);
-    const n=(buckets[key]=(buckets[key]||0)+1);   // 同じ位置・同方面は横並び
-    const dx=(n-1)*130;
+    const n=(buckets[key]=(buckets[key]||0)+1);   // 同じ位置・同方面は縦並び
+    y+=(n-1)*56;
     let el=g.querySelector('#tr'+k);
     if(!el){
       el=document.createElement('div'); el.className='tr '+(tr.down?'dn':'up'); el.id='tr'+k; el.dataset.k=k;
@@ -419,7 +425,6 @@ function renderPos(t){
       g.appendChild(el);
     }
     el.style.top=y+'px';
-    if(tr.down) el.style.left=`calc(50% + ${30+dx}px)`; else el.style.right=`calc(50% + ${30+dx}px)`;
   }
   g.querySelectorAll('.tr').forEach(el=>{ if(!keep.has(el.id)) el.remove(); });
   $('posNow').textContent=`${dateStr()} ${fmt(t)} 現在`;
@@ -430,6 +435,20 @@ function posEnter(){ posLeave(); buildTrack(); refresh(); timer=setInterval(refr
 function posLeave(){ if(timer){clearInterval(timer);timer=null;} }
 $('refreshBtn').onclick=refresh;
 $('posDia').onchange=e=>{posDia=+e.target.value;buildTrack();refresh()};
+
+/* ---- 駅クリック：同じ駅がある別路線へ ---- */
+function otherRoutesWithStation(name){
+  return ROUTES.map((r,i)=>i).filter(i=>i!==curRoute && routeData(i).stations.some(st=>st.name===name));
+}
+function openXfer(name){
+  const list=otherRoutesWithStation(name);
+  $('modal').innerHTML=`<div class="mh"><span>${esc(name)}</span><button id="mclose" aria-label="閉じる">×</button></div>
+    <div class="mb"><p style="margin:0 0 8px;color:#555;font-size:14px">この駅を通る他の路線</p>
+    <ul class="xlist">${list.map(i=>`<li><button data-i="${i}">${esc(routeName(i))}</button></li>`).join('')}</ul></div>`;
+  $('mclose').onclick=closeModal;
+  $('modal').querySelectorAll('.xlist button').forEach(b=>b.onclick=()=>{ closeModal(); setRoute(+b.dataset.i); go('pos'); });
+  $('modalbg').classList.add('show');
+}
 
 /* ---- 列車ポップアップ ---- */
 function openModal(k){ selected=k; $('modalbg').classList.add('show'); renderModal(curT); }
