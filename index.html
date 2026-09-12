@@ -346,7 +346,7 @@ function locate(train, t){
         let a=train.down? Math.floor(f) : Math.ceil(f);
         let b=train.down? a+1 : a-1;
         if(train.down){ if(b>nx.idx){a=nx.idx-1;b=nx.idx;} } else { if(b<nx.idx){a=nx.idx+1;b=nx.idx;} }
-        return {state:'run', from:a, to:b, now};
+        return {state:'run', from:a, to:b, now, f};   // f=進行度（駅index換算）
       }
     }
   }
@@ -460,26 +460,38 @@ function buildTrack(){
 function renderPos(t){
   curT=t;
   const g=$('trains'); if(!g) return;
-  const trains=data.dias[posDia].trains, buckets={};
-  const keep=new Set();
+  const trains=data.dias[posDia].trains;
+  const keep=new Set(), groups={};
+  // 1) 位置を求めてグループ化（同方面・同じ駅／駅間）
   for(let k=0;k<trains.length;k++){
     const tr=trains[k]; if(tr.hidden) continue;
     const loc=locate(tr,t); if(!loc) continue;
     keep.add('tr'+k);
-    let y= loc.state==='stop'? yOf(loc.idx) : (yOf(loc.from)+yOf(loc.to))/2;
-    const key=(tr.down?'d':'u')+Math.round(y);
-    const n=(buckets[key]=(buckets[key]||0)+1);   // 同じ位置・同方面は縦並び
-    y+=(n-1)*56;
-    let el=g.querySelector('#tr'+k);
-    if(!el){
-      el=document.createElement('div'); el.className='tr '+(tr.down?'dn':'up'); el.id='tr'+k; el.dataset.k=k;
-      const mark=MARKS[tr.type.name]??tr.type.name.slice(0,1), c=chevColor(tr);
-      el.innerHTML=`<svg class="chev" style="fill:${c}"><use href="#${tr.down?'chevDn':'chevUp'}"/></svg>
-        <div class="lbl"><div class="no">${mark?`<b style="background:${c}">${esc(mark)}</b>`:''}${esc(tr.trainNo)}[${tr.cars}]</div>
-        <div class="dest">${esc(tr.destIdx!=null?data.stations[tr.destIdx].name:'')}</div></div>`;
-      g.appendChild(el);
-    }
-    el.style.top=y+'px';
+    const base= loc.state==='stop'? yOf(loc.idx) : (yOf(loc.from)+yOf(loc.to))/2;
+    // 進み具合: 走行中は進行度、停車中は発車の早い列車ほど先行とみなす
+    const prog= loc.state==='run'? loc.f : (tr.down? 1:-1)*(-(loc.stop.dep))/1e6 + loc.idx;
+    const key=(tr.down?'d':'u')+Math.round(base);
+    (groups[key]=groups[key]||{base, down:tr.down, items:[]}).items.push({k,tr,prog});
+  }
+  // 2) グループ内を進行順に並べ、先行列車が進行方向側（下りは下、上りは上）に来るよう縦に配置
+  for(const key in groups){
+    const gr=groups[key];
+    gr.items.sort((a,b)=> gr.down? a.prog-b.prog : b.prog-a.prog);
+    const n=gr.items.length;
+    gr.items.forEach((it,i)=>{
+      const y=gr.base+(i-(n-1)/2)*56;
+      const {k,tr}=it;
+      let el=g.querySelector('#tr'+k);
+      if(!el){
+        el=document.createElement('div'); el.className='tr '+(tr.down?'dn':'up'); el.id='tr'+k; el.dataset.k=k;
+        const mark=MARKS[tr.type.name]??tr.type.name.slice(0,1), c=chevColor(tr);
+        el.innerHTML=`<svg class="chev" style="fill:${c}"><use href="#${tr.down?'chevDn':'chevUp'}"/></svg>
+          <div class="lbl"><div class="no">${mark?`<b style="background:${c}">${esc(mark)}</b>`:''}${esc(tr.trainNo)}[${tr.cars}]</div>
+          <div class="dest">${esc(tr.destIdx!=null?data.stations[tr.destIdx].name:'')}</div></div>`;
+        g.appendChild(el);
+      }
+      el.style.top=y+'px';
+    });
   }
   g.querySelectorAll('.tr').forEach(el=>{ if(!keep.has(el.id)) el.remove(); });
   $('posNow').textContent=`${dateStr()} ${fmt(t)} 現在`;
