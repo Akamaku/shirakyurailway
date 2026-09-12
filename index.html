@@ -31,8 +31,6 @@
   .menu .box{position:absolute;left:0;top:0;bottom:0;width:min(78vw,300px);background:#fff;padding:max(16px,env(safe-area-inset-top)) 0 16px;overflow:auto}
   .menu h2{font-size:14px;color:var(--ink-dim);font-weight:600;margin:0 16px 8px}
   .menu .item{display:block;width:100%;text-align:left;background:none;border:0;border-bottom:1px solid var(--rule);padding:14px 16px;font-size:18px;color:var(--navy);font-weight:600}
-  .menu .item.file{position:relative;overflow:hidden;color:var(--blue-ink);font-weight:500;font-size:15px}
-  .menu .item.file input{position:absolute;inset:0;opacity:0}
 
   /* ヘッダー */
   .hdr{position:sticky;top:66px;z-index:20;background:var(--navy);color:#fff;
@@ -164,7 +162,6 @@
   <button class="item" data-go="tt">時刻表</button>
   <button class="item" data-go="posSel">走行位置</button>
   <button class="item" data-go="ops">運用表</button>
-  <label class="item file">別の .oud2 ファイルを開く<input type="file" id="file" accept=".oud2,.oud,.txt"></label>
 </div></div>
 
 <!-- ===== ホーム ===== -->
@@ -614,15 +611,6 @@ function setRoute(i){
   posDia=pickDia(data.dias);
   updateHourOptions();
 }
-$('file').onchange=async e=>{
-  const f=e.target.files[0]; if(!f) return;
-  const buf=await f.arrayBuffer();
-  let text=new TextDecoder('utf-8').decode(buf);
-  if(/\uFFFD/.test(text)){ try{text=new TextDecoder('shift_jis').decode(buf);}catch(_){} }
-  ROUTES.push({name:f.name.replace(/\.(oud2?|txt)$/i,''), text});
-  try{ setRoute(ROUTES.length-1); nav.length=0; go('home'); alert(`${data.rosenName} を追加しました`); }catch(err){ ROUTES.pop(); alert('読み込めませんでした: '+err.message); }
-  $('menu').classList.remove('show'); e.target.value='';
-};
 setRoute(0); go('home');
 </script>
 </body>
