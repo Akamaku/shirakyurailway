@@ -101,6 +101,32 @@
   .modal tr.done td{color:#9aa}
   .modal .bikou{font-size:12px;color:var(--ink-dim);margin:10px 0 0}
 
+  /* 運用投稿 */
+  .pbox{border:1.5px solid var(--blue-ink);border-radius:12px;padding:12px 14px 14px;margin-bottom:22px}
+  .pbox h3{margin:0 0 10px;font-size:18px;color:var(--blue-ink)}
+  .pform{display:grid;grid-template-columns:1fr 1fr;gap:8px 12px}
+  .pform label{display:flex;flex-direction:column;font-size:12px;color:var(--ink-dim);gap:3px}
+  .pform label.wide{grid-column:1/-1}
+  .pform input,.pform select{font-size:16px;padding:7px 8px;border:1px solid #bbc;border-radius:6px;background:#fff;color:var(--ink)}
+  .pbtn{margin-top:12px;background:var(--blue-ink);color:#fff;border:0;border-radius:8px;padding:10px 22px;font-size:16px;font-weight:700}
+  .pbtn:disabled{opacity:.5}
+  .pmsg{font-size:13px;color:var(--ink-dim);margin-top:8px;min-height:1.2em}
+  .pmsg.err{color:var(--red)}
+  .plist{border-collapse:collapse;width:100%;font-size:14px}
+  .plist th{text-align:left;color:var(--ink-dim);font-weight:600;padding:6px 6px;border-bottom:2px solid var(--rule);white-space:nowrap}
+  .plist td{padding:7px 6px;border-bottom:1px solid var(--rule);vertical-align:top}
+  .plist td.no{color:#1a5cff;font-weight:600;white-space:nowrap}
+  .plist td.tm{color:var(--ink-dim);white-space:nowrap;font-variant-numeric:tabular-nums}
+  .plist .note{color:#555;font-size:12px}
+  .ptag{display:inline-block;background:var(--band);color:var(--navy);border-radius:4px;padding:1px 6px;font-size:11px;margin-right:4px}
+  .modal .posts{margin-top:14px;border-top:2px solid var(--rule);padding-top:10px}
+  .modal .posts h4{margin:0 0 6px;font-size:14px;color:var(--ink-dim)}
+  .modal .delay{color:var(--red);font-weight:700}
+  .modal .qform{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+  .modal .qform input{flex:1;min-width:90px;font-size:15px;padding:6px 8px;border:1px solid #bbc;border-radius:6px}
+  .modal .qform button{background:var(--blue-ink);color:#fff;border:0;border-radius:6px;padding:6px 14px;font-weight:700}
+  .tr .no small{font-size:11px;color:var(--red);margin-left:4px;font-weight:700}
+
   /* 運用表 */
   .doc{padding:18px 16px 40px;max-width:760px;margin:0 auto}
   .doc h2{font-size:24px;margin:0 0 14px;padding-left:14px;border-left:4px dotted #333;line-height:1.3}
@@ -134,6 +160,9 @@
   }
 
   /* 時刻表 */
+  .tog{display:flex;border:1.5px solid #fff;border-radius:6px;overflow:hidden}
+  .tog button{background:transparent;border:0;color:#fff;padding:5px 14px;font-size:14px}
+  .tog button.on{background:#fff;color:var(--navy);font-weight:700}
   .ttwrap{overflow:auto;max-height:calc(100vh - 210px)}
   .tt{border-collapse:separate;border-spacing:0;font-size:14px;font-variant-numeric:tabular-nums;white-space:nowrap}
   .tt th,.tt td{border-right:1px solid #c9c9c9;border-bottom:1px solid #c9c9c9;padding:3px 6px;text-align:center;min-width:46px;background:#fff}
@@ -142,11 +171,31 @@
   .tt thead tr:nth-child(2) th{top:29px}
   .tt thead tr:nth-child(3) th{top:58px}
   .tt th.stn,.tt td.stn{position:sticky;left:0;background:#f3d9b5;text-align:left;font-weight:700;z-index:2;min-width:96px}
+  .tt td.stn{color:var(--blue-ink);text-decoration:underline;cursor:pointer}
   .tt thead th.stn{z-index:4}
   .tt td.pass{color:#666;font-size:11px}
   .tt td sup{font-size:9px;color:var(--blue-ink);margin-left:1px}
   .tt .cars{display:inline-block;width:20px;height:20px;border-radius:50%;border:1px solid #333;line-height:18px;font-size:11px;background:#fff}
   .tt td.major{background:#fbfbfb}
+  /* 駅時刻表（京阪風） */
+  .ktt{padding:8px 6px 40px;background:#fff}
+  .krow{display:flex;align-items:flex-start;background:#d9d9d9;margin-bottom:4px;min-height:58px}
+  .krow:nth-child(even){background:#e9e9e9}
+  .khr{flex:none;width:44px;align-self:stretch;background:#3a3a3a;color:#fff;font-size:24px;font-weight:700;display:flex;align-items:center;justify-content:center}
+  .kcells{display:flex;flex-wrap:wrap;gap:2px 4px;padding:14px 4px 4px;position:relative}
+  .kd{position:relative;width:56px;height:56px;border-radius:0;color:#fff;font-weight:700;margin-top:4px;cursor:pointer;-webkit-tap-highlight-color:transparent}
+  .kd .dst{position:absolute;left:0;top:-16px;font-size:11px;color:#111;font-weight:800;white-space:nowrap;letter-spacing:-.03em}
+  .kd .m{position:absolute;left:0;right:0;top:0;text-align:center;font-size:30px;line-height:1.15;letter-spacing:-.02em}
+  .kd .trk{position:absolute;left:3px;bottom:2px;font-size:12px;line-height:1;font-weight:700}
+  .kd .trk b{font-size:17px}
+  .kd .cars{position:absolute;right:3px;bottom:3px;width:17px;height:17px;border-radius:50%;background:#fff;color:#333;font-size:12px;font-weight:800;line-height:17px;text-align:center}
+  .kd.plain{background:#fff;color:#111;border:2px solid #111;box-sizing:border-box}
+  .kd.plain .cars{background:#111;color:#fff}
+  .kd:active{filter:brightness(.85)}
+  .kcells{display:flex;flex-wrap:wrap;gap:14px 12px;padding:22px 10px 10px}
+  .krow{min-height:84px;margin-bottom:8px}
+  .klegend{font-size:12px;color:#444;margin:10px 4px;line-height:1.9}
+  .klegend .kd{display:inline-block;width:18px;height:18px;vertical-align:middle;margin:0 2px 0 6px}
 </style>
 </head>
 <body>
@@ -162,6 +211,7 @@
   <button class="item" data-go="tt">時刻表</button>
   <button class="item" data-go="posSel">走行位置</button>
   <button class="item" data-go="ops">運用表</button>
+  <button class="item" data-go="post">運用投稿</button>
 </div></div>
 
 <!-- ===== ホーム ===== -->
@@ -181,6 +231,9 @@
       <button class="tile" data-go="ops">
         <svg viewBox="0 0 64 64"><line x1="14" y1="12" x2="14" y2="52" stroke-width="7"/><line x1="24" y1="12" x2="52" y2="12"/><line x1="24" y1="22" x2="52" y2="22"/><line x1="24" y1="32" x2="52" y2="32"/><line x1="24" y1="42" x2="52" y2="42"/><line x1="24" y1="52" x2="52" y2="52"/></svg>
         運用表</button>
+      <button class="tile" data-go="post">
+        <svg viewBox="0 0 64 64"><path d="M12 14 h40 v30 h-24 l-10 8 v-8 h-6z"/><line x1="20" y1="24" x2="44" y2="24"/><line x1="20" y1="33" x2="36" y2="33"/></svg>
+        運用投稿</button>
       <a class="tile" href="dev.html" style="text-decoration:none">
         <svg viewBox="0 0 64 64"><path d="M40 12 l12 12 -26 26 -12 -12z"/><path d="M14 38 l-6 6 12 12 6 -6"/><path d="M40 12 l-4 -4 8 -2 6 6 -2 8 -4 -4"/><path d="M34 30 l-8 -8"/></svg>
         開発情報</a>
@@ -204,6 +257,33 @@
   <div class="track" id="track"></div>
 </section>
 
+<!-- ===== 運用投稿 ===== -->
+<section class="page" id="pg-post">
+  <header class="hdr">
+    <span></span>
+    <div class="ttl"><h1>運用投稿</h1><div class="now" id="postNow"></div></div>
+    <button class="hbtn r" id="postRefresh">更新</button>
+  </header>
+  <div class="doc">
+    <div class="pbox">
+      <h3>投稿する</h3>
+      <div class="pform">
+        <label>路線<select id="pfLine"><option value="sakurada">白急桜田線</option><option value="metro">青波メトロ</option></select></label>
+        <label>列車番号<input id="pfTrain" placeholder="例: 1813K"></label>
+        <label>運用番号<input id="pfOp" placeholder="例: 45A / S01"></label>
+        <label>編成<input id="pfSet" placeholder="例: NA401 / NB803"></label>
+        <label>両数<input id="pfCars" inputmode="numeric" placeholder="例: 6"></label>
+        <label>投稿者<input id="pfName" placeholder="任意"></label>
+        <label class="wide">メモ<input id="pfNote" placeholder="任意（見た場所など）"></label>
+      </div>
+      <button class="pbtn" id="pfSubmit">投稿</button>
+      <div class="pmsg" id="pfMsg"></div>
+    </div>
+    <h2 id="postListTitle">本日の投稿</h2>
+    <div id="postList"></div>
+  </div>
+</section>
+
 <!-- ===== 運用表 ===== -->
 <section class="page" id="pg-ops">
   <header class="hdr">
@@ -221,11 +301,25 @@
   </header>
   <div class="sub">
     <select id="ttRoute"></select>
-    <span id="ttDiaName"></span>
-    <select id="ttDir"><option value="d">下り</option><option value="u">上り</option></select>
+    <select id="ttDia"></select>
+    <div class="tog"><button id="ttUp">上り</button><button id="ttDn" class="on">下り</button></div>
     <select id="ttHour"><option value="">全時間帯</option></select>
   </div>
   <div class="ttwrap" id="ttBody"></div>
+  <p style="font-size:12px;color:#555;margin:8px 12px">左端の駅名をタップすると、その駅の時刻表が開きます。</p>
+</section>
+
+<!-- ===== 駅時刻表 ===== -->
+<section class="page" id="pg-stt">
+  <header class="hdr">
+    <span></span>
+    <div class="ttl"><h1 id="sttTitle">駅時刻表</h1><div class="now" id="sttSub"></div></div><span></span>
+  </header>
+  <div class="sub">
+    <select id="sttSt"></select>
+    <div class="tog"><button id="sttUp">上り</button><button id="sttDn" class="on">下り</button></div>
+  </div>
+  <div class="ktt" id="sttBody"></div>
 </section>
 
 <div class="modalbg" id="modalbg"><div class="modal" id="modal"></div></div>
@@ -278,7 +372,17 @@ function parseOud2(text, fallbackName){
     if(noName){ for(const x of trains){ x.trainNo=x.opNoRaw; x.opNo=''; } chainOperations(trains); }
     return {name:d.DiaName||'ダイヤ', trains: trains.filter(x=>!x.hidden), holiday:/土休|休日|土日/.test(d.DiaName||'')};
   });
-  return {rosenName:rosen.Rosenmei||fallbackName||'路線', stations, types, dias};
+  // 駅間ごとの標準所要時間: 隣接駅どちらにも時刻がある列車の中央値（通過列車の位置推定に使う）
+  const segRun=[];
+  for(let i=0;i<stations.length-1;i++){
+    const v=[];
+    for(const dia of dias) for(const x of dia.trains){
+      const st=x.stops.filter(z=>z.arr!=null);
+      for(let j=0;j<st.length-1;j++){ const a=st[j],b=st[j+1]; if(Math.min(a.idx,b.idx)===i&&Math.abs(a.idx-b.idx)===1){ const d=b.arr-a.dep; if(d>0) v.push(d); } }
+    }
+    v.sort((a,b)=>a-b); segRun.push(v.length? v[Math.floor(v.length/2)] : 120);
+  }
+  return {rosenName:rosen.Rosenmei||fallbackName||'路線', stations, types, dias, segRun};
 }
 // 終着駅で「次の列車に続く」列車を、同じ駅から出る「前の列車から続く」列車へつなぐ（同一番線を優先し、最も早い発車）
 function chainOperations(trains){
@@ -333,20 +437,22 @@ function buildTrain(r, down, n, types){
 /* ========== 2. 位置計算 ========== */
 function locate(train, t){
   const st=train.stops.filter(s=>s.arr!=null); if(st.length<2) return null;
-  for(const now of [t]){
-    if(now<st[0].dep||now>st[st.length-1].arr) continue;
-    for(let i=0;i<st.length;i++){
-      const s=st[i];
-      if(now>=s.arr&&now<=s.dep&&s.kind===1) return {state:'stop', idx:s.idx, stop:s, now};
-      const nx=st[i+1]; if(!nx) break;
-      if(now>s.dep&&now<nx.arr){
-        // 前後の時刻から「どの駅間にいるか」を推定し、その駅間の中間に置く
-        const p=(now-s.dep)/(nx.arr-s.dep);
-        const f=s.idx+(nx.idx-s.idx)*p;
-        let a=train.down? Math.floor(f) : Math.ceil(f);
-        let b=train.down? a+1 : a-1;
-        if(train.down){ if(b>nx.idx){a=nx.idx-1;b=nx.idx;} } else { if(b<nx.idx){a=nx.idx+1;b=nx.idx;} }
-        return {state:'run', from:a, to:b, now, f};   // f=進行度（駅index換算）
+  const now=t;
+  if(now<st[0].dep||now>st[st.length-1].arr) return null;
+  for(let i=0;i<st.length;i++){
+    const s=st[i];
+    if(now>=s.arr&&now<=s.dep&&s.kind===1) return {state:'stop', idx:s.idx, stop:s, now};
+    const nx=st[i+1]; if(!nx) break;
+    if(now>s.dep&&now<nx.arr){
+      // 時刻のある2駅 s→nx の間を、駅間ごとの標準所要時間で按分して、今どの駅間にいるかを推定
+      const dir=train.down?1:-1, segs=[];
+      for(let k=s.idx;k!==nx.idx;k+=dir) segs.push({from:k,to:k+dir,w:(data&&data.segRun? data.segRun[Math.min(k,k+dir)] : 120)||120});
+      const total=segs.reduce((acc,g)=>acc+g.w,0), span=nx.arr-s.dep;
+      let acc=0;
+      for(const g of segs){
+        const ta=s.dep+span*acc/total, tb=s.dep+span*(acc+g.w)/total;   // この駅間の推定 発／着 時刻
+        acc+=g.w;
+        if(now<tb || g===segs[segs.length-1]) return {state:'run', from:g.from, to:g.to, now, ta, tb};
       }
     }
   }
@@ -414,6 +520,8 @@ function show(id){
   if(id==='posSel') renderPosSel();
   if(id==='ops') renderOps();
   if(id==='tt'){ refreshTTRoute(); renderTT(); }
+  if(id==='stt') renderSTT();
+  if(id==='post') postEnter();
 }
 function go(id, state){
   if(id==='ops') opsState= state||{dia:null,op:null};
@@ -468,15 +576,17 @@ function renderPos(t){
     const loc=locate(tr,t); if(!loc) continue;
     keep.add('tr'+k);
     const base= loc.state==='stop'? yOf(loc.idx) : (yOf(loc.from)+yOf(loc.to))/2;
-    // 進み具合: 走行中は進行度、停車中は発車の早い列車ほど先行とみなす
-    const prog= loc.state==='run'? loc.f : (tr.down? 1:-1)*(-(loc.stop.dep))/1e6 + loc.idx;
+    // 並び順キー: 走行中＝次駅に着く推定時刻、停車中＝発車時刻（早いほど先行。同じ駅間では追い越せない）
+    const prog= loc.state==='run'? loc.tb : loc.stop.dep;
     const key=(tr.down?'d':'u')+Math.round(base);
     (groups[key]=groups[key]||{base, down:tr.down, items:[]}).items.push({k,tr,prog});
   }
-  // 2) グループ内を進行順に並べ、先行列車が進行方向側（下りは下、上りは上）に来るよう縦に配置
+  // 2) 先に出た列車ほど進行方向側に置く。下りは画面下が前方、上りは画面上が前方なので、
+  //    どちらも「早い順」に上から並べれば、下りは先頭が下…ではなく逆になるため下りだけ反転する
   for(const key in groups){
     const gr=groups[key];
-    gr.items.sort((a,b)=> gr.down? a.prog-b.prog : b.prog-a.prog);
+    gr.items.sort((a,b)=>a.prog-b.prog);      // 早く出た順（先頭が先）
+    if(gr.down) gr.items.reverse();           // 下り: 先頭を一番下へ
     const n=gr.items.length;
     gr.items.forEach((it,i)=>{
       const y=gr.base+(i-(n-1)/2)*56;
@@ -574,23 +684,33 @@ function renderOps(){
     <p class="note">${todayDia?'赤字は現在運行中の列車です。':`（${esc(dia.name)}は本日のダイヤではないため、運用中表示はありません）`}</p></div>`;
 }
 
-/* ========== 時刻表 ========== */
- $('ttDir').onchange=()=>{updateHourOptions();renderTT();}; $('ttHour').onchange=renderTT;
-$('ttRoute').onchange=()=>{ setRoute(+$('ttRoute').value); renderTT(); };
-function refreshTTRoute(){ $('ttRoute').innerHTML=ROUTES.map((r,i)=>`<option value="${i}">${esc(routeName(i))}</option>`).join(''); $('ttRoute').value=curRoute; }
+/* ========== 時刻表（一覧表） ========== */
+let ttState={dia:0, down:true, st:0, hour:''};
+$('ttRoute').onchange=()=>{ setRoute(+$('ttRoute').value); ttState.st=0; ttState.dia=pickDia(data.dias); ttState.hour=''; refreshTTRoute(); renderTT(); };
+$('ttDia').onchange=()=>{ ttState.dia=+$('ttDia').value; renderTT(); };
+$('ttUp').onclick=()=>{ ttState.down=false; renderTT(); };
+$('ttDn').onclick=()=>{ ttState.down=true; renderTT(); };
+$('ttHour').onchange=()=>{ ttState.hour=$('ttHour').value; renderTT(); };
+function refreshTTRoute(){
+  $('ttRoute').innerHTML=ROUTES.map((r,i)=>`<option value="${i}">${esc(routeName(i))}</option>`).join(''); $('ttRoute').value=curRoute;
+  $('ttDia').innerHTML=data.dias.map((d,i)=>`<option value="${i}">${esc(d.name)}</option>`).join('');
+  if(ttState.dia>=data.dias.length) ttState.dia=pickDia(data.dias);
+  $('ttDia').value=ttState.dia;
+}
 function updateHourOptions(){
-  const dia=data.dias[pickDia(data.dias)], down=$('ttDir').value==='d';
+  const dia=data.dias[ttState.dia]||data.dias[0], down=ttState.down;
   const hours=[...new Set(dia.trains.filter(x=>x.down===down&&x.first).map(x=>Math.floor(x.first.dep/3600)))].sort((a,b)=>a-b);
-  const cur=$('ttHour').value;
   $('ttHour').innerHTML=`<option value="">全時間帯</option>`+hours.map(hh=>`<option value="${hh}">${hh}時台</option>`).join('');
-  $('ttHour').value = hours.includes(+cur)? cur : '';
+  if(!hours.includes(+ttState.hour)) ttState.hour='';
+  $('ttHour').value=ttState.hour;
 }
 function renderTT(){
-  posDia=pickDia(data.dias); const dia=data.dias[posDia], down=$('ttDir').value==='d', hour=$('ttHour').value;
-  $('ttDiaName').textContent=dia.name;
+  const dia=data.dias[ttState.dia]||data.dias[0], down=ttState.down;
+  $('ttUp').classList.toggle('on',!down); $('ttDn').classList.toggle('on',down);
   $('ttTitle').textContent=`${data.rosenName} ${down?'下り':'上り'}`;
+  updateHourOptions();
   let trains=dia.trains.filter(x=>x.down===down&&x.first).sort((a,b)=>a.first.dep-b.first.dep);
-  if(hour!=='') trains=trains.filter(x=>Math.floor(x.first.dep/3600)===+hour);
+  if(ttState.hour!=='') trains=trains.filter(x=>Math.floor(x.first.dep/3600)===+ttState.hour);
   const order=data.stations.map((_,i)=>i); if(!down) order.reverse();
   let h=`<table class="tt"><thead>
     <tr><th class="stn">運用番号</th>${trains.map(x=>`<th>${esc(x.opNo)}</th>`).join('')}</tr>
@@ -598,7 +718,7 @@ function renderTT(){
     <tr><th class="stn">両数</th>${trains.map(x=>`<th><span class="cars">${x.cars}</span></th>`).join('')}</tr></thead><tbody>`;
   for(const i of order){
     const st=data.stations[i];
-    h+=`<tr><td class="stn">${esc(st.name)}</td>`;
+    h+=`<tr><td class="stn" data-i="${i}">${esc(st.name)}</td>`;
     for(const x of trains){
       const s=x.stops.find(z=>z.idx===i);
       const mj=st.major?'major':'';
@@ -612,7 +732,121 @@ function renderTT(){
   }
   h+=`</tbody></table>`;
   $('ttBody').innerHTML=h;
+  $('ttBody').querySelectorAll('td.stn').forEach(td=>td.onclick=()=>{ ttState.st=+td.dataset.i; go('stt'); });
 }
+
+/* ========== 駅時刻表（京阪風） ========== */
+const KTT_COLOR={'普通':null,'準急':'#2b62c9','急行':'#e8731e','通勤急行':'#7b3f9d','快速':'#2e9b4f'};   // null=白地黒枠
+function kttColor(name){ return KTT_COLOR[name]===undefined? '#555' : KTT_COLOR[name]; }
+$('sttSt').onchange=()=>{ ttState.st=+$('sttSt').value; renderSTT(); };
+$('sttUp').onclick=()=>{ ttState.down=false; renderSTT(); };
+$('sttDn').onclick=()=>{ ttState.down=true; renderSTT(); };
+function renderSTT(){
+  const dia=data.dias[ttState.dia]||data.dias[0], down=ttState.down;
+  if(ttState.st>=data.stations.length) ttState.st=0;
+  const si=ttState.st, st=data.stations[si];
+  $('sttUp').classList.toggle('on',!down); $('sttDn').classList.toggle('on',down);
+  $('sttSt').innerHTML=data.stations.map((x,i)=>`<option value="${i}">${esc(x.name)}</option>`).join(''); $('sttSt').value=si;
+  const far=data.stations[down? data.stations.length-1 : 0].name;
+  $('sttTitle').textContent=`${st.name}駅発 → ${far} 方面`;
+  $('sttSub').textContent=`${data.rosenName}　${dia.name}`;
+  const deps=[];
+  for(const x of dia.trains){
+    if(x.down!==down||!x.first) continue;
+    const s=x.stops.find(z=>z.idx===si);
+    if(!s||s.kind!==1||s.dep==null||s===x.lastStop) continue;
+    deps.push({t:s.dep,x,s});
+  }
+  deps.sort((a,b)=>a.t-b.t);
+  const byHour={}; for(const d of deps){ const hh=Math.floor(d.t/3600); (byHour[hh]=byHour[hh]||[]).push(d); }
+  const hours=Object.keys(byHour).map(Number).sort((a,b)=>a-b);
+  if(!hours.length){ $('sttBody').innerHTML=`<p style="color:#666;padding:12px">この方面の発車はありません。</p>`; return; }
+  let h='';
+  for(const hh of hours){
+    h+=`<div class="krow"><div class="khr">${hh}</div><div class="kcells">`;
+    for(const d of byHour[hh]){
+      const mm=String(Math.floor(d.t%3600/60)).padStart(2,'0');
+      const col=kttColor(d.x.type.name);
+      const dest=d.x.destIdx!=null?data.stations[d.x.destIdx].name:'';
+      const trk=trackName(d.s), first=(d.s===d.x.first);
+      h+=`<div class="kd ${col?'':'plain'}" style="${col?`background:${col}`:''}" data-k="${dia.trains.indexOf(d.x)}" title="${esc(d.x.type.name)} ${esc(d.x.trainNo)}">
+        <span class="dst">${esc(dest)}</span><span class="m">${mm}</span>
+        <span class="trk"><b>${esc(trk)}</b>${first?'始':''}</span><span class="cars">${d.x.cars}</span></div>`;
+    }
+    h+=`</div></div>`;
+  }
+  const used=[...new Set(deps.map(d=>d.x.type.name))];
+  h+=`<div class="klegend">${used.map(n=>{const c=kttColor(n);return `<span class="kd ${c?'':'plain'}" style="${c?`background:${c}`:''}"></span>${esc(n)}`;}).join('')}<br>枠の上＝行先、左下＝発車番線（「始」は当駅始発）、右下＝両数</div>`;
+  $('sttBody').innerHTML=h;
+  $('sttBody').querySelectorAll('.kd[data-k]').forEach(el=>el.onclick=()=>openTrainInfo(dia.trains[+el.dataset.k]));
+}
+/* 列車の停車駅・時刻ポップアップ（駅時刻表から） */
+function openTrainInfo(tr){
+  const dest=tr.destIdx!=null? data.stations[tr.destIdx].name:'';
+  const last=tr.stops[tr.stops.length-1];
+  const rows=tr.stops.map(s=>{
+    const st=data.stations[s.idx];
+    if(s.kind===2) return `<tr><td class="pass">${esc(st.name)}</td><td class="t pass">${s.arr!=null?fmtHM(s.arr):''}</td><td class="t pass">レ</td><td class="pass">${esc(trackName(s))}</td></tr>`;
+    return `<tr class="${s.idx===ttState.st?'now':''}"><td>${esc(st.name)}</td><td class="t">${(s.arr!==s.dep||s===last)?fmtHM(s.arr):''}</td><td class="t">${s!==last?fmtHM(s.dep):''}</td><td>${esc(trackName(s))}</td></tr>`;
+  }).join('');
+  $('modal').innerHTML=`<div class="mh"><span>${esc(tr.type.name)} ${esc(dest)}行</span><button id="mclose" aria-label="閉じる">×</button></div>
+    <div class="mb">
+      <div class="l1"><span class="num">${esc(tr.trainNo)}</span> <span class="typ">[${esc(tr.type.name)}]</span> ${esc(dest)}</div>
+      <div class="l2">${tr.cars}両編成　<span style="color:#666;font-size:14px">運用 ${esc(tr.opNo)}</span></div>
+      <table><thead><tr><th>駅</th><th style="text-align:right">着</th><th style="text-align:right">発</th><th>番線</th></tr></thead><tbody>${rows}</tbody></table>
+    </div>`;
+  $('mclose').onclick=closeModal; $('modalbg').classList.add('show');
+}
+
+/* ========== 運用投稿バックエンド ========== */
+// Google Apps Script のウェブアプリURL（gas/Code.gs を配置して発行したURL）。空のときは端末内(localStorage)のみに保存。
+const API_URL = '';
+const POST_LINES = {sakurada:'白急桜田線', metro:'青波メトロ'};
+function opDateStr(){ const d=opDate(); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; }
+async function apiList(date){
+  if(!API_URL){ try{ return JSON.parse(localStorage.getItem('posts')||'[]').filter(p=>p.date===date); }catch(_){ return []; } }
+  const r=await fetch(`${API_URL}?action=list&date=${encodeURIComponent(date)}`); if(!r.ok) throw new Error('HTTP '+r.status);
+  const j=await r.json(); return j.posts||[];
+}
+async function apiAdd(post){
+  if(!API_URL){ const a=JSON.parse(localStorage.getItem('posts')||'[]'); a.push(post); localStorage.setItem('posts',JSON.stringify(a)); return; }
+  const r=await fetch(API_URL,{method:'POST', body:JSON.stringify({action:'add', post})}); // Content-Type を付けない（プリフライト回避）
+  if(!r.ok) throw new Error('HTTP '+r.status);
+  const j=await r.json(); if(!j.ok) throw new Error(j.error||'保存に失敗しました');
+}
+let postsCache={date:null, posts:[]};
+async function loadPosts(force){
+  const date=opDateStr();
+  if(!force && postsCache.date===date && Date.now()-postsCache.at<60000) return postsCache.posts;
+  const posts=await apiList(date); postsCache={date, posts, at:Date.now()}; return posts;
+}
+function postRow(p){
+  return `<tr><td class="tm">${esc(p.time||'')}</td><td class="no"><span class="ptag">${esc(POST_LINES[p.line]||p.line)}</span>${esc(p.trainNo)}</td>
+    <td>${esc(p.opNo||'')}</td><td>${esc(p.set||'')}${p.cars?` <span style="color:#555">[${esc(p.cars)}]</span>`:''}</td>
+    <td>${esc(p.name||'')}${p.note?`<div class="note">${esc(p.note)}</div>`:''}</td></tr>`;
+}
+async function renderPostList(force){
+  $('postNow').textContent=`${dateStr()} ${fmt(nowSec())} 現在`+(API_URL?'':'　※共有バックエンド未設定（この端末のみ）');
+  const el=$('postList'); el.innerHTML='<p style="color:#888">読み込み中…</p>';
+  try{
+    const posts=(await loadPosts(force)).slice().sort((a,b)=>(b.time||'').localeCompare(a.time||''));
+    el.innerHTML= posts.length? `<table class="plist"><thead><tr><th>時刻</th><th>列車</th><th>運用</th><th>編成</th><th>投稿者</th></tr></thead><tbody>${posts.map(postRow).join('')}</tbody></table>` : '<p style="color:#888">本日の投稿はまだありません。</p>';
+  }catch(err){ el.innerHTML=`<p style="color:var(--red)">読み込みに失敗しました: ${esc(err.message)}</p>`; }
+}
+function postEnter(){ renderPostList(false); }
+$('postRefresh').onclick=()=>renderPostList(true);
+async function submitPost(post, msgEl, btn){
+  if(!post.trainNo){ msgEl.textContent='列車番号を入力してください'; msgEl.classList.add('err'); return false; }
+  btn.disabled=true; msgEl.classList.remove('err'); msgEl.textContent='送信中…';
+  try{ await apiAdd(post); msgEl.textContent='投稿しました'; postsCache.date=null; return true; }
+  catch(err){ msgEl.textContent='投稿に失敗しました: '+err.message; msgEl.classList.add('err'); return false; }
+  finally{ btn.disabled=false; }
+}
+function newPost(o){ const d=new Date(); return Object.assign({date:opDateStr(), time:`${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`}, o); }
+$('pfSubmit').onclick=async()=>{
+  const post=newPost({line:$('pfLine').value, trainNo:$('pfTrain').value.trim(), opNo:$('pfOp').value.trim(), set:$('pfSet').value.trim(), cars:$('pfCars').value.trim(), name:$('pfName').value.trim(), note:$('pfNote').value.trim()});
+  if(await submitPost(post,$('pfMsg'),$('pfSubmit'))){ $('pfTrain').value=$('pfOp').value=$('pfSet').value=$('pfCars').value=$('pfNote').value=''; renderPostList(true); }
+};
 
 /* ========== 起動・路線管理 ========== */
 let curRoute=0;
