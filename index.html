@@ -101,31 +101,6 @@
   .modal tr.done td{color:#9aa}
   .modal .bikou{font-size:12px;color:var(--ink-dim);margin:10px 0 0}
 
-  /* 運用投稿 */
-  .pbox{border:1.5px solid var(--blue-ink);border-radius:12px;padding:12px 14px 14px;margin-bottom:22px}
-  .pbox h3{margin:0 0 10px;font-size:18px;color:var(--blue-ink)}
-  .pform{display:grid;grid-template-columns:1fr 1fr;gap:8px 12px}
-  .pform label{display:flex;flex-direction:column;font-size:12px;color:var(--ink-dim);gap:3px}
-  .pform label.wide{grid-column:1/-1}
-  .pform input,.pform select{font-size:16px;padding:7px 8px;border:1px solid #bbc;border-radius:6px;background:#fff;color:var(--ink)}
-  .pbtn{margin-top:12px;background:var(--blue-ink);color:#fff;border:0;border-radius:8px;padding:10px 22px;font-size:16px;font-weight:700}
-  .pbtn:disabled{opacity:.5}
-  .pmsg{font-size:13px;color:var(--ink-dim);margin-top:8px;min-height:1.2em}
-  .pmsg.err{color:var(--red)}
-  .plist{border-collapse:collapse;width:100%;font-size:14px}
-  .plist th{text-align:left;color:var(--ink-dim);font-weight:600;padding:6px 6px;border-bottom:2px solid var(--rule);white-space:nowrap}
-  .plist td{padding:7px 6px;border-bottom:1px solid var(--rule);vertical-align:top}
-  .plist td.no{color:#1a5cff;font-weight:600;white-space:nowrap}
-  .plist td.tm{color:var(--ink-dim);white-space:nowrap;font-variant-numeric:tabular-nums}
-  .plist .note{color:#555;font-size:12px}
-  .ptag{display:inline-block;background:var(--band);color:var(--navy);border-radius:4px;padding:1px 6px;font-size:11px;margin-right:4px}
-  .modal .posts{margin-top:14px;border-top:2px solid var(--rule);padding-top:10px}
-  .modal .posts h4{margin:0 0 6px;font-size:14px;color:var(--ink-dim)}
-  .modal .delay{color:var(--red);font-weight:700}
-  .modal .qform{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
-  .modal .qform input{flex:1;min-width:90px;font-size:15px;padding:6px 8px;border:1px solid #bbc;border-radius:6px}
-  .modal .qform button{background:var(--blue-ink);color:#fff;border:0;border-radius:6px;padding:6px 14px;font-weight:700}
-  .tr .no small{font-size:11px;color:var(--red);margin-left:4px;font-weight:700}
 
   /* 運用表 */
   .doc{padding:18px 16px 40px;max-width:760px;margin:0 auto}
@@ -211,7 +186,6 @@
   <button class="item" data-go="tt">時刻表</button>
   <button class="item" data-go="posSel">走行位置</button>
   <button class="item" data-go="ops">運用表</button>
-  <button class="item" data-go="post">運用投稿</button>
 </div></div>
 
 <!-- ===== ホーム ===== -->
@@ -231,9 +205,6 @@
       <button class="tile" data-go="ops">
         <svg viewBox="0 0 64 64"><line x1="14" y1="12" x2="14" y2="52" stroke-width="7"/><line x1="24" y1="12" x2="52" y2="12"/><line x1="24" y1="22" x2="52" y2="22"/><line x1="24" y1="32" x2="52" y2="32"/><line x1="24" y1="42" x2="52" y2="42"/><line x1="24" y1="52" x2="52" y2="52"/></svg>
         運用表</button>
-      <button class="tile" data-go="post">
-        <svg viewBox="0 0 64 64"><path d="M12 14 h40 v30 h-24 l-10 8 v-8 h-6z"/><line x1="20" y1="24" x2="44" y2="24"/><line x1="20" y1="33" x2="36" y2="33"/></svg>
-        運用投稿</button>
       <a class="tile" href="dev.html" style="text-decoration:none">
         <svg viewBox="0 0 64 64"><path d="M40 12 l12 12 -26 26 -12 -12z"/><path d="M14 38 l-6 6 12 12 6 -6"/><path d="M40 12 l-4 -4 8 -2 6 6 -2 8 -4 -4"/><path d="M34 30 l-8 -8"/></svg>
         開発情報</a>
@@ -255,33 +226,6 @@
   </header>
   <div class="sub" id="posSub"></div>
   <div class="track" id="track"></div>
-</section>
-
-<!-- ===== 運用投稿 ===== -->
-<section class="page" id="pg-post">
-  <header class="hdr">
-    <span></span>
-    <div class="ttl"><h1>運用投稿</h1><div class="now" id="postNow"></div></div>
-    <button class="hbtn r" id="postRefresh">更新</button>
-  </header>
-  <div class="doc">
-    <div class="pbox">
-      <h3>投稿する</h3>
-      <div class="pform">
-        <label>路線<select id="pfLine"><option value="sakurada">白急桜田線</option><option value="metro">青波メトロ</option></select></label>
-        <label>列車番号<input id="pfTrain" placeholder="例: 1813K"></label>
-        <label>運用番号<input id="pfOp" placeholder="例: 45A / S01"></label>
-        <label>編成<input id="pfSet" placeholder="例: NA401 / NB803"></label>
-        <label>両数<input id="pfCars" inputmode="numeric" placeholder="例: 6"></label>
-        <label>投稿者<input id="pfName" placeholder="任意"></label>
-        <label class="wide">メモ<input id="pfNote" placeholder="任意（見た場所など）"></label>
-      </div>
-      <button class="pbtn" id="pfSubmit">投稿</button>
-      <div class="pmsg" id="pfMsg"></div>
-    </div>
-    <h2 id="postListTitle">本日の投稿</h2>
-    <div id="postList"></div>
-  </div>
 </section>
 
 <!-- ===== 運用表 ===== -->
@@ -521,7 +465,6 @@ function show(id){
   if(id==='ops') renderOps();
   if(id==='tt'){ refreshTTRoute(); renderTT(); }
   if(id==='stt') renderSTT();
-  if(id==='post') postEnter();
 }
 function go(id, state){
   if(id==='ops') opsState= state||{dia:null,op:null};
@@ -797,56 +740,6 @@ function openTrainInfo(tr){
     </div>`;
   $('mclose').onclick=closeModal; $('modalbg').classList.add('show');
 }
-
-/* ========== 運用投稿バックエンド ========== */
-// Google Apps Script のウェブアプリURL（gas/Code.gs を配置して発行したURL）。空のときは端末内(localStorage)のみに保存。
-const API_URL = '';
-const POST_LINES = {sakurada:'白急桜田線', metro:'青波メトロ'};
-function opDateStr(){ const d=opDate(); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; }
-async function apiList(date){
-  if(!API_URL){ try{ return JSON.parse(localStorage.getItem('posts')||'[]').filter(p=>p.date===date); }catch(_){ return []; } }
-  const r=await fetch(`${API_URL}?action=list&date=${encodeURIComponent(date)}`); if(!r.ok) throw new Error('HTTP '+r.status);
-  const j=await r.json(); return j.posts||[];
-}
-async function apiAdd(post){
-  if(!API_URL){ const a=JSON.parse(localStorage.getItem('posts')||'[]'); a.push(post); localStorage.setItem('posts',JSON.stringify(a)); return; }
-  const r=await fetch(API_URL,{method:'POST', body:JSON.stringify({action:'add', post})}); // Content-Type を付けない（プリフライト回避）
-  if(!r.ok) throw new Error('HTTP '+r.status);
-  const j=await r.json(); if(!j.ok) throw new Error(j.error||'保存に失敗しました');
-}
-let postsCache={date:null, posts:[]};
-async function loadPosts(force){
-  const date=opDateStr();
-  if(!force && postsCache.date===date && Date.now()-postsCache.at<60000) return postsCache.posts;
-  const posts=await apiList(date); postsCache={date, posts, at:Date.now()}; return posts;
-}
-function postRow(p){
-  return `<tr><td class="tm">${esc(p.time||'')}</td><td class="no"><span class="ptag">${esc(POST_LINES[p.line]||p.line)}</span>${esc(p.trainNo)}</td>
-    <td>${esc(p.opNo||'')}</td><td>${esc(p.set||'')}${p.cars?` <span style="color:#555">[${esc(p.cars)}]</span>`:''}</td>
-    <td>${esc(p.name||'')}${p.note?`<div class="note">${esc(p.note)}</div>`:''}</td></tr>`;
-}
-async function renderPostList(force){
-  $('postNow').textContent=`${dateStr()} ${fmt(nowSec())} 現在`+(API_URL?'':'　※共有バックエンド未設定（この端末のみ）');
-  const el=$('postList'); el.innerHTML='<p style="color:#888">読み込み中…</p>';
-  try{
-    const posts=(await loadPosts(force)).slice().sort((a,b)=>(b.time||'').localeCompare(a.time||''));
-    el.innerHTML= posts.length? `<table class="plist"><thead><tr><th>時刻</th><th>列車</th><th>運用</th><th>編成</th><th>投稿者</th></tr></thead><tbody>${posts.map(postRow).join('')}</tbody></table>` : '<p style="color:#888">本日の投稿はまだありません。</p>';
-  }catch(err){ el.innerHTML=`<p style="color:var(--red)">読み込みに失敗しました: ${esc(err.message)}</p>`; }
-}
-function postEnter(){ renderPostList(false); }
-$('postRefresh').onclick=()=>renderPostList(true);
-async function submitPost(post, msgEl, btn){
-  if(!post.trainNo){ msgEl.textContent='列車番号を入力してください'; msgEl.classList.add('err'); return false; }
-  btn.disabled=true; msgEl.classList.remove('err'); msgEl.textContent='送信中…';
-  try{ await apiAdd(post); msgEl.textContent='投稿しました'; postsCache.date=null; return true; }
-  catch(err){ msgEl.textContent='投稿に失敗しました: '+err.message; msgEl.classList.add('err'); return false; }
-  finally{ btn.disabled=false; }
-}
-function newPost(o){ const d=new Date(); return Object.assign({date:opDateStr(), time:`${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`}, o); }
-$('pfSubmit').onclick=async()=>{
-  const post=newPost({line:$('pfLine').value, trainNo:$('pfTrain').value.trim(), opNo:$('pfOp').value.trim(), set:$('pfSet').value.trim(), cars:$('pfCars').value.trim(), name:$('pfName').value.trim(), note:$('pfNote').value.trim()});
-  if(await submitPost(post,$('pfMsg'),$('pfSubmit'))){ $('pfTrain').value=$('pfOp').value=$('pfSet').value=$('pfCars').value=$('pfNote').value=''; renderPostList(true); }
-};
 
 /* ========== 起動・路線管理 ========== */
 let curRoute=0;
