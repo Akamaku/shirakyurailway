@@ -16,10 +16,7 @@ data/ フォルダには元の OuDiaSecond ファイルを入れています。
    ];
  走行位置・運用表・時刻表のそれぞれで路線を選べるようになります。
 
-大和路線（リアルタイム走行位置）と運用投稿:
  - 大和路線ページは JR西日本「列車走行位置」の JSON
    (https://www.train-guide.westjr.co.jp/api/v3/yamatoji.json) を15秒ごとに読みます（非公式利用）。
    ブラウザから直接取得できない（CORS で失敗する）場合は、下記の GAS を設置すると中継されます。
- - 運用投稿を利用者間で共有するには gas/Code.gs を Google Apps Script のウェブアプリとして
    公開し、その URL を index.html の  const API_URL = '';  に入れてください。
-   API_URL が空のあいだは、投稿はその端末の localStorage にだけ保存されます（共有されません）。
